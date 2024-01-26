@@ -20,8 +20,8 @@ class Channel:
         self.channel_info: str = self.channel['items'][0]['snippet']['description']
         self.url: str = self.channel['items'][0]['snippet']['thumbnails']['default']['url']
         self.subscribers_count: int = self.channel['items'][0]['statistics']['subscriberCount']
-        self.video_count: int = self.channel['items'][0]['statistics']['viewCount']
-        self.view_count: int = self.channel['items'][0]['statistics']['videoCount']
+        self.video_count: int = self.channel['items'][0]['statistics']['videoCount']
+        self.view_count: int = self.channel['items'][0]['statistics']['viewCount']
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
@@ -37,8 +37,15 @@ class Channel:
         return self.__channel_id
 
     def to_json(self, file_name):
-        """Сохраняет данные в JSON-файл"""
-
-        with open(file_name, "a") as f:
-            # if os.stat(file_name).st_size == 0:
-            json.dump(self.channel, f)
+        """Метод, сохраняющий в файл значения атрибутов экземпляра `Channel`"""
+        info_dict = {
+            'chanel_id': self.__channel_id,
+            'title': self.title,
+            'channel_info': self.channel_info,
+            'url': self.url,
+            'subscribers_count': self.subscribers_count,
+            'video_count': self.video_count,
+            'view_count': self.view_count,
+        }
+        with open(file_name, "w") as f:
+            json.dump(info_dict, f)
