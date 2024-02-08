@@ -19,18 +19,18 @@ class Channel:
         self.title: str = self.channel['items'][0]['snippet']['title']
         self.channel_info: str = self.channel['items'][0]['snippet']['description']
         self.url: str = self.channel['items'][0]['snippet']['thumbnails']['default']['url']
-        self.subscribers_count: int = self.channel['items'][0]['statistics']['subscriberCount']
-        self.video_count: int = self.channel['items'][0]['statistics']['videoCount']
-        self.view_count: int = self.channel['items'][0]['statistics']['viewCount']
+        self.subscribers_count: int = int(self.channel['items'][0]['statistics']['subscriberCount'])
+        self.video_count: int = int(self.channel['items'][0]['statistics']['videoCount'])
+        self.view_count: int = int(self.channel['items'][0]['statistics']['viewCount'])
 
     def __str__(self):
         return f"{self.title} ({self.url})"
 
     def __add__(self, other):
-        return int(self.subscribers_count) + int(other.subscribers_count)
+        return self.subscribers_count + other.subscribers_count
 
     def __sub__(self, other):
-        return int(self.subscribers_count) - int(other.subscribers_count)
+        return self.subscribers_count - other.subscribers_count
 
     def __gt__(self, other):
         return self.subscribers_count > other.subscribers_count
