@@ -23,6 +23,10 @@ class Channel:
         self.video_count: int = int(self.channel['items'][0]['statistics']['videoCount'])
         self.view_count: int = int(self.channel['items'][0]['statistics']['viewCount'])
 
+
+
+
+
     def __str__(self):
         return f"{self.title} ({self.url})"
 

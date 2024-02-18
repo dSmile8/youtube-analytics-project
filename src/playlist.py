@@ -18,6 +18,10 @@ class PlayList:
                                                             part='contentDetails,snippet',
                                                             maxResults=50,
                                                             ).execute()
+        self.video_ids = self.make_list_video_id()
+        self.video_response = self.youtube.videos().list(part='contentDetails,statistics, snippet',
+                                                         id=','.join(self.video_ids)
+                                                         ).execute()
         for k in self.playlists_info['items']:
             if k['id'] == playlist_id:
                 self.title = k['snippet']['title']
@@ -33,26 +37,18 @@ class PlayList:
     @property
     def total_duration(self):
         """Получаем общую продолжительность видео плэйлиста"""
-        video_ids = self.make_list_video_id()
-        video_response = self.youtube.videos().list(part='contentDetails,statistics, snippet',
-                                                    id=','.join(video_ids)
-                                                    ).execute()
 
         total = datetime.timedelta(0)
-        for video in video_response['items']:
+        for video in self.video_response['items']:
             iso_8601_duration = video['contentDetails']['duration']
             duration = isodate.parse_duration(iso_8601_duration)
             total += duration
-        return (total)
+        return total
 
     def show_best_video(self):
         '''Получаем самое популярное видео из плэйлиста'''
         view_dict = {}
-        video_ids = self.make_list_video_id()  # Получаем список с id всех видео плэйлиста
-        video_response = self.youtube.videos().list(part='contentDetails,statistics, snippet',
-                                                    id=','.join(video_ids)
-                                                    ).execute()
-        for video in video_response['items']:
+        for video in self.video_response['items']:
             view_dict[video['id']] = int(video['statistics']['viewCount'])  # Добавляем ключ: значение в словарь
             maximum = max(view_dict, key=view_dict.get)  # Ищем ключ с max значением value
         return f'https://youtu.be/{maximum}'

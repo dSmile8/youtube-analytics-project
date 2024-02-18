@@ -12,10 +12,16 @@ class Video:
                                                 id=video_id
                                                 ).execute()
         self.video_id = video_id
-        self.title: str = self.video['items'][0]['snippet']['title']
-        self.url: str = self.video['items'][0]['snippet']['thumbnails']['default']['url']
-        self.view_count: int = int(self.video['items'][0]['statistics']['viewCount'])
-        self.like_count: int = self.video['items'][0]['statistics']['likeCount']
+        try:
+            self.title: str = self.video['items'][0]['snippet']['title']
+            self.url: str = self.video['items'][0]['snippet']['thumbnails']['default']['url']
+            self.view_count: int = int(self.video['items'][0]['statistics']['viewCount'])
+            self.like_count: int = self.video['items'][0]['statistics']['likeCount']
+        except IndexError:
+            self.title = None
+            self.url = None
+            self.view_count = None
+            self.like_count = None
 
     def __repr__(self):
         return f'{self.video}\n{self.title}\n{self.url}\n{self.view_count}\n{self.like_count}'
@@ -33,9 +39,3 @@ class PLVideo(Video):
                                                                  maxResults=50,
                                                                  ).execute()
         self.playlist_id = playlist_id
-
-
-video1 = Video('AWX4JnAnjBE')
-print(video1)
-video2 = PLVideo('4fObz_qw9u4', 'PLv_zOGKKxVph_8g2Mqc3LMhj0M_BfasbC')
-print(video2)
